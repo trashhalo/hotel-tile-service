@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    <title>Add a third party vector tile source</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id='map'></div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoidHJhc2hoYWxvIiwiYSI6ImNqZGo4eHhhMTFndzQzM3JsbHpzdWc1MzYifQ.osbeLboskQFYczAzK2bXWA';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/light-v9',
+            zoom: 12,
+            center: [-77.032353, 38.905511]
+        });
+
+        map.on('load', function () {
+            map.addLayer({
+                "id": "hotel-data",
+                "type": "symbol",
+                "source": {
+                    "type": "vector",
+                    "tiles": ["http://localhost:3000/neighborhood/{z}/{x}/{y}"],
+                    "minzoom": 6,
+                    "maxzoom": 14
+                },
+                "source-layer": "test",
+                "layout": {
+                    "icon-image": "{icon}-15",
+                    "text-field": "{title}",
+                    "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+                    "text-offset": [0, 0.6],
+                    "text-anchor": "top"
+                }
+            });
+        });
+
+        map.addControl(new mapboxgl.NavigationControl());
+    </script>
+
+</body>
+
+</html>
