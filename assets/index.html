@@ -54,15 +54,34 @@
                 }
             });
         });
+        let pause = false;
         setInterval(() => {
             const newStyle = map.getStyle();
-            if (newStyle.sources.hotelData) {
+            if (!pause && newStyle.sources.hotelData) {
                 newStyle.sources.hotelData.tiles = [`http://localhost:3000/neighborhood/{z}/{x}/{y}?bust=${Math.random()}`];
                 map.setStyle(newStyle);
             }
         }, 3000);
+        map.on('click', 'hotelData', function (e) {
+            pause = true;
+            var coordinates = e.features[0].geometry.coordinates.slice();
+            var description = e.features[0].properties.hotelPropertiesId;
+
+            // Ensure that if the map is zoomed out such that multiple
+            // copies of the feature are visible, the popup appears
+            // over the copy being pointed to.
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+            // TODO lookup hotel properties object that you already have client side and render a nice popup
+            new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(description)
+                .addTo(map);
+        });
+
         map.addControl(new mapboxgl.NavigationControl());
-    </script>
+        </script>
 
 </body>
 
