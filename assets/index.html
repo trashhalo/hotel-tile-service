@@ -36,7 +36,7 @@
 
         map.on('load', function () {
             map.addLayer({
-                "id": "hotel-data",
+                "id": "hotelData",
                 "type": "symbol",
                 "source": {
                     "type": "vector",
@@ -54,7 +54,13 @@
                 }
             });
         });
-
+        setInterval(() => {
+            const newStyle = map.getStyle();
+            if (newStyle.sources.hotelData) {
+                newStyle.sources.hotelData.tiles = [`http://localhost:3000/neighborhood/{z}/{x}/{y}?bust=${Math.random()}`];
+                map.setStyle(newStyle);
+            }
+        }, 3000);
         map.addControl(new mapboxgl.NavigationControl());
     </script>
 

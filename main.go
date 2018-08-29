@@ -1,14 +1,16 @@
 package main
 
 import (
+	"math/rand"
+	"net/http"
+	"strconv"
+
 	"github.com/labstack/echo"
 	"github.com/paulmach/orb"
 	"github.com/paulmach/orb/encoding/mvt"
 	"github.com/paulmach/orb/geojson"
 	"github.com/paulmach/orb/maptile"
 	"github.com/paulmach/orb/simplify"
-	"net/http"
-	"strconv"
 )
 
 func main() {
@@ -27,7 +29,7 @@ func contextToMaptile(c echo.Context) maptile.Tile {
 
 func neighborhood(c echo.Context) error {
 	fc := geojson.NewFeatureCollection()
-	p := orb.Point{-77.032353, 38.905511}
+	p := orb.Point{-77.032353 + (0.01 * rand.Float64()), 38.905511 + (0.01 * rand.Float64())}
 	f := geojson.NewFeature(p)
 	f.Properties["icon"] = "marker"
 	fc.Append(f)
