@@ -31,8 +31,8 @@ func neighborhood(c echo.Context) error {
 	fc := geojson.NewFeatureCollection()
 	p := orb.Point{-77.032353 + (0.01 * rand.Float64()), 38.905511 + (0.01 * rand.Float64())}
 	f := geojson.NewFeature(p)
-	f.Properties["icon"] = "marker"
 	f.Properties["hotelPropertiesId"] = 11120
+	f.Properties["price"] = "$300"
 	fc.Append(f)
 	collections := map[string]*geojson.FeatureCollection{
 		"test": fc,

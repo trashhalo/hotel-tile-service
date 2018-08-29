@@ -35,23 +35,31 @@
         });
 
         map.on('load', function () {
-            map.addLayer({
-                "id": "hotelData",
-                "type": "symbol",
-                "source": {
-                    "type": "vector",
-                    "tiles": ["http://localhost:3000/neighborhood/{z}/{x}/{y}"],
-                    "minzoom": 6,
-                    "maxzoom": 14
-                },
-                "source-layer": "test",
-                "layout": {
-                    "icon-image": "{icon}-15",
-                    "text-field": "{title}",
-                    "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-                    "text-offset": [0, 0.6],
-                    "text-anchor": "top"
-                }
+            map.loadImage('/marker.png', (err, img) => {
+                map.addImage('upside-pin', img);
+                map.addLayer({
+                    "id": "hotelData",
+                    "type": "symbol",
+                    "source": {
+                        "type": "vector",
+                        "tiles": ["http://localhost:3000/neighborhood/{z}/{x}/{y}"],
+                        "minzoom": 6,
+                        "maxzoom": 14
+                    },
+                    "source-layer": "test",
+                    "layout": {
+                        "icon-image": "upside-pin",
+                        "text-field": "{price}",
+                        "text-size":  9,
+                        "icon-size": 1,
+                        "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+                        "text-anchor": "top",
+                        "text-offset": [0,-1.1],
+                    },
+                    "paint": {
+                        "text-color": "#000"
+                    }
+                });
             });
         });
         let pause = false;
@@ -61,7 +69,7 @@
                 newStyle.sources.hotelData.tiles = [`http://localhost:3000/neighborhood/{z}/{x}/{y}?bust=${Math.random()}`];
                 map.setStyle(newStyle);
             }
-        }, 3000);
+        }, 10000);
         map.on('click', 'hotelData', function (e) {
             pause = true;
             var coordinates = e.features[0].geometry.coordinates.slice();
